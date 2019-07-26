@@ -1,0 +1,14 @@
+{
+  "name": "eice-project",
+  "version": "1.0.0",
+  "description": "Tinkerforge JavaScript Bindings ===============================",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tinkerforge": "^2.1.23"
+  }
+}
