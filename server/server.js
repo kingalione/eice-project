@@ -1,11 +1,15 @@
-var Tinkerforge = require('tinkerforge');
+let Tinkerforge = require('tinkerforge');
+let app = require('express')();
+let http = require('http').createServer(app);
+let io = require('socket.io')(http);
+let socket = io();
 
-var HOST = 'localhost';
-var PORT = 4223;
-var UID = 'uu5'; // Change XYZ to the UID of your Accelerometer Bricklet
+let HOST = 'localhost';
+let PORT = 4223;
+let UID = 'uu5';
 
-var ipcon = new Tinkerforge.IPConnection(); // Create IP connection
-var a = new Tinkerforge.BrickletAccelerometer(UID, ipcon); // Create device object
+let ipcon = new Tinkerforge.IPConnection(); // Create IP connection
+let acc = new Tinkerforge.BrickletAccelerometer(UID, ipcon); // Create device object
 
 ipcon.connect(HOST, PORT, function(error) {
   console.log('Error: ' + error);
@@ -16,11 +20,11 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED, function(connectReason) {
   // Set period for acceleration callback to 1s (1000ms)
   // Note: The acceleration callback is only called every second
   //       if the acceleration has changed since the last call!
-  a.setAccelerationCallbackPeriod(1000);
+  acc.setAccelerationCallbackPeriod(1000);
 });
 
 // Register acceleration callback
-a.on(
+acc.on(
   Tinkerforge.BrickletAccelerometer.CALLBACK_ACCELERATION,
   // Callback function for acceleration callback
   function(x, y, z) {
@@ -28,8 +32,18 @@ a.on(
     console.log('Acceleration [Y]: ' + y / 1000.0 + ' g');
     console.log('Acceleration [Z]: ' + z / 1000.0 + ' g');
     console.log();
+
+    //emit socket event
+    socket.emit('acc changed', { x: x, y: y, z: z });
   }
 );
+app.get('/', function(req, res) {
+  res.send('<h1>Hello world</h1>');
+});
+
+http.listen(3000, function() {
+  console.log('listening on *:3000');
+});
 
 console.log('Press key to exit');
 process.stdin.on('data', function(data) {
