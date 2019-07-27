@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.17.1",
     "tinkerforge": "^2.1.23"
+  },
+  "devDependencies": {
+    "socket.io": "^2.2.0"
   }
 }

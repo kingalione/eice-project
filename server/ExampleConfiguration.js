@@ -5,7 +5,7 @@ var PORT = 4223;
 var UID = 'uu5'; // Change XYZ to the UID of your Accelerometer Bricklet
 
 var ipcon = new Tinkerforge.IPConnection(); // Create IP connection
-var a = new Tinkerforge.BrickletAccelerometer(UID, ipcon); // Create device object
+var acc = new Tinkerforge.BrickletAccelerometer(UID, ipcon); // Create device object
 
 ipcon.connect(HOST, PORT, function(error) {
   console.log('Error: ' + error);
@@ -16,11 +16,11 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED, function(connectReason) {
   // Set period for acceleration callback to 1s (1000ms)
   // Note: The acceleration callback is only called every second
   //       if the acceleration has changed since the last call!
-  a.setAccelerationCallbackPeriod(1000);
+  acc.setAccelerationCallbackPeriod(1000);
 });
 
 // Register acceleration callback
-a.on(
+acc.on(
   Tinkerforge.BrickletAccelerometer.CALLBACK_ACCELERATION,
   // Callback function for acceleration callback
   function(x, y, z) {
