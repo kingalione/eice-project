@@ -5,10 +5,10 @@ let io = require('socket.io')(http);
 
 let HOST = 'localhost';
 let PORT = 4223;
-let UID = 'uu5';
 
 let ipcon = new Tinkerforge.IPConnection(); // Create IP connection
-let acc = new Tinkerforge.BrickletAccelerometer(UID, ipcon); // Create device object
+let acc = new Tinkerforge.BrickletAccelerometer('uu5', ipcon); // Create device object
+var ambientLight = new Tinkerforge.BrickletAmbientLightV2('uu4', ipcon);
 
 ipcon.connect(HOST, PORT, function(error) {
   console.log('Error: ' + error);
@@ -20,6 +20,10 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED, function(connectReason) {
   // Note: The acceleration callback is only called every second
   //       if the acceleration has changed since the last call!
   acc.setAccelerationCallbackPeriod(1000);
+  ambientLight.setConfiguration(
+    Tinkerforge.BrickletAmbientLightV2.ILLUMINANCE_RANGE_64000LUX,
+    Tinkerforge.BrickletAmbientLightV2.INTEGRATION_TIME_200MS
+  );
 });
 
 // Register acceleration callback
@@ -36,6 +40,18 @@ acc.on(
     io.emit('update-acc', [x / 1000.0, y / 1000.0, z / 1000.0]);
   }
 );
+
+ambientLight.on(
+  Tinkerforge.BrickletAmbientLightV2.CALLBACK_ILLUMINANCE,
+  // Callback function for illuminance callback
+  function(illuminance) {
+    console.log('Illuminance: ' + illuminance / 100.0 + ' lx');
+    console.log();
+
+    io.emit('update-illuminance', illuminance / 100.0);
+  }
+);
+
 app.get('/', function(req, res) {
   res.send('<h1>Hello world</h1>');
 });
