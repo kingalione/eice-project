@@ -9,6 +9,7 @@ let PORT = 4223;
 let ipcon = new Tinkerforge.IPConnection(); // Create IP connection
 let acc = new Tinkerforge.BrickletAccelerometer('uu5', ipcon); // Create device object
 var ambientLight = new Tinkerforge.BrickletAmbientLightV2('uu4', ipcon);
+var temperature = new Tinkerforge.BrickletTemperature('uu3', ipcon); // Create device object
 
 ipcon.connect(HOST, PORT, function(error) {
   console.log('Error: ' + error);
@@ -20,6 +21,7 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED, function(connectReason) {
   // Note: The acceleration callback is only called every second
   //       if the acceleration has changed since the last call!
   acc.setAccelerationCallbackPeriod(1000);
+  temperature.setTemperatureCallbackPeriod(1000);
   ambientLight.setConfiguration(
     Tinkerforge.BrickletAmbientLightV2.ILLUMINANCE_RANGE_64000LUX,
     Tinkerforge.BrickletAmbientLightV2.INTEGRATION_TIME_200MS
@@ -41,6 +43,7 @@ acc.on(
   }
 );
 
+// Register illuminance callback
 ambientLight.on(
   Tinkerforge.BrickletAmbientLightV2.CALLBACK_ILLUMINANCE,
   // Callback function for illuminance callback
@@ -49,6 +52,18 @@ ambientLight.on(
     console.log();
 
     io.emit('update-illuminance', illuminance / 100.0);
+  }
+);
+
+// Register temperature callback
+temperature.on(
+  Tinkerforge.BrickletTemperature.CALLBACK_TEMPERATURE,
+  // Callback function for temperature callback
+  function(temperature) {
+    console.log('Temperature: ' + temperature / 100.0 + ' °C');
+    console.log();
+
+    io.emit('update-temperature', temperature / 100.0);
   }
 );
 
