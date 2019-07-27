@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "reboot": "^0.1.0",
     "tinkerforge": "^2.1.23"
   },
   "devDependencies": {

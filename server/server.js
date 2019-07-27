@@ -2,6 +2,7 @@ let Tinkerforge = require('tinkerforge');
 let app = require('express')();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
+let system = require('reboot');
 
 let HOST = 'localhost';
 let PORT = 4223;
@@ -19,6 +20,11 @@ io.on('connection', function(socket) {
     ipcon.connect(HOST, PORT, function(error) {
       console.log('Error: ' + error);
     });
+  });
+
+  socket.on('reboot', function() {
+    console.log('Rebooting system...');
+    system.reboot();
   });
 });
 
