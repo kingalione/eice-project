@@ -33,7 +33,7 @@ acc.on(
     console.log();
 
     //emit socket event
-    io.emit('acc changed', 'x: ' + x);
+    io.emit('update-acc', [x / 1000.0, y / 1000.0, z / 1000.0]);
   }
 );
 app.get('/', function(req, res) {
