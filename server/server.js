@@ -11,6 +11,17 @@ let acc = new Tinkerforge.BrickletAccelerometer('uu5', ipcon); // Create device 
 var al = new Tinkerforge.BrickletAmbientLightV2('uu4', ipcon);
 var tem = new Tinkerforge.BrickletTemperature('uu3', ipcon); // Create device object
 
+io.on('connection', function(socket) {
+  socket.on('reconnect-master-brick', function() {
+    ipcon.disconnect();
+    console.log('Master Brick disconnected.');
+
+    ipcon.connect(HOST, PORT, function(error) {
+      console.log('Error: ' + error);
+    });
+  });
+});
+
 ipcon.connect(HOST, PORT, function(error) {
   console.log('Error: ' + error);
 }); // Connect to brickd
@@ -65,7 +76,7 @@ tem.on(
 );
 
 app.get('/', function(req, res) {
-  res.send('<h1>Hello world</h1>');
+  res.send('<h1>Server online</h1>');
 });
 
 http.listen(3000, function() {
