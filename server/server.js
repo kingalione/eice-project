@@ -2,7 +2,6 @@ let Tinkerforge = require('tinkerforge');
 let app = require('express')();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
-let socket = io();
 
 let HOST = 'localhost';
 let PORT = 4223;
@@ -34,7 +33,7 @@ acc.on(
     console.log();
 
     //emit socket event
-    socket.emit('acc changed', { x: x, y: y, z: z });
+    io.emit('acc changed', 'x: ' + x);
   }
 );
 app.get('/', function(req, res) {
