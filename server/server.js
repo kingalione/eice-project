@@ -14,12 +14,16 @@ var tem = new Tinkerforge.BrickletTemperature('uu3', ipcon); // Create device ob
 
 io.on('connection', function(socket) {
   socket.on('reconnect-master-brick', function() {
+    console.log('Reconnect master brick command received!');
+
     ipcon.disconnect();
-    console.log('Master Brick disconnected.');
+    console.log('Master brick disconnected.');
 
     ipcon.connect(HOST, PORT, function(error) {
       console.log('Error: ' + error);
     });
+
+    console.log('Master Brick connected.');
   });
 
   socket.on('reboot', function() {
@@ -34,13 +38,24 @@ ipcon.connect(HOST, PORT, function(error) {
 // Don't use device before ipcon is connected
 
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED, function(connectReason) {
+  console.log(
+    'Tinkerfore IPConnection connection established and callback received.'
+  );
   // Set period for acceleration callback to 1s (1000ms)
   // Note: The acceleration callback is only called every second
   //       if the acceleration has changed since the last call!
   // use differenet pirmenumber callbackperiods to avoid conflicts
-  al.setIlluminanceCallbackPeriod(911);
-  acc.setAccelerationCallbackPeriod(1373);
-  tem.setTemperatureCallbackPeriod(683);
+  let al_cb_period = 911;
+  al.setIlluminanceCallbackPeriod(al_cb_period);
+  console.log('AmbientLight brick callback period set to: ' + al_cb_period);
+
+  let acc_cb_period = 1373;
+  acc.setAccelerationCallbackPeriod(acc_cb_period);
+  console.log('Acceleration brick callback period set to: ' + acc_cb_period);
+
+  let tem_cb_period = 683;
+  tem.setTemperatureCallbackPeriod(tem_cb_period);
+  console.log('Temperature brick callback period set to: ' + tem_cb_period);
 });
 
 //Register acceleration callback
@@ -48,9 +63,17 @@ acc.on(
   Tinkerforge.BrickletAccelerometer.CALLBACK_ACCELERATION,
   // Callback function for acceleration callback
   (x, y, z) => {
-    console.log('Acceleration [X]: ' + x / 1000.0 + ' g');
-    console.log('Acceleration [Y]: ' + y / 1000.0 + ' g');
-    console.log('Acceleration [Z]: ' + z / 1000.0 + ' g');
+    console.log(
+      'Acceleration [X]: ' +
+        x / 1000.0 +
+        ' g' +
+        ', [Y]: ' +
+        y / 1000.0 +
+        ' g' +
+        ', [Z]: ' +
+        z / 1000.0 +
+        ' g'
+    );
     console.log();
 
     //emit socket event
