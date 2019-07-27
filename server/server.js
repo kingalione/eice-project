@@ -82,14 +82,14 @@ tem.on(
 );
 
 app.get('/', function(req, res) {
-  res.send('<h1>Server online</h1>');
+  res.send('<h1>TinkerForge Sensors Server is online :-)</h1>');
 });
 
 http.listen(3000, function() {
   console.log('listening on *:3000');
 });
 
-console.log('Press key to exit');
+console.log('Press any key to exit');
 process.stdin.on('data', function(data) {
   ipcon.disconnect();
   process.exit(0);
