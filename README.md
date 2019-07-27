@@ -24,9 +24,9 @@ stderr_logfile=/var/log/tf-sensors.err.log
 9. reboot system with `sudo shutdown -r 0`
 10. open mobile app
 
-## update the server
+## Update the server
 
 1. go into the project directory `<<PATCH_TO_PROJECT_DIR>>/server`
 2. run `git pull`
-3. run `nmp install`
+3. run `npm install`
 4. reboot system with `sudo shutdown -r 0`
