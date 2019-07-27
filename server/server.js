@@ -37,9 +37,10 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED, function(connectReason) {
   // Set period for acceleration callback to 1s (1000ms)
   // Note: The acceleration callback is only called every second
   //       if the acceleration has changed since the last call!
-  al.setIlluminanceCallbackPeriod(1000);
-  acc.setAccelerationCallbackPeriod(1000);
-  tem.setTemperatureCallbackPeriod(1000);
+  // use differenet pirmenumber callbackperiods to avoid conflicts
+  al.setIlluminanceCallbackPeriod(911);
+  acc.setAccelerationCallbackPeriod(1373);
+  tem.setTemperatureCallbackPeriod(683);
 });
 
 //Register acceleration callback

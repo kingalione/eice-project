@@ -5,9 +5,10 @@
 1. install git
 2. run `git clone https://github.com/kingalione/eice-project`
 3. install nodejs, npm, supervisord
-4. install tinkerforge brickd by following instructions given at: https://www.tinkerforge.com/de/doc/Software/Brickd_Install_Linux.html#brickd-install-linux
+4. configure hostname to `tf-sensors-raspi-1.local`
+5. install tinkerforge brickdaemon `brickd` by following the instructions given at: https://www.tinkerforge.com/de/doc/Software/Brickd_Install_Linux.html#brickd-install-linux
 
-5. create supervisor config in `/etc/supervisor/conf.d/` like this:
+6. create supervisor config in `/etc/supervisor/conf.d/` like this:
 
 ```
 [program:tf-sensors]
@@ -18,10 +19,10 @@ autorestart=true
 stderr_logfile=/var/log/tf-sensors.err.log
 ```
 
-6. go to project directory of this new repo
-7. run `npm install`
-8. reboot system with `sudo shutdown -r 0`
-9. open app
+7. go to project directory of this new repo
+8. run `npm install`
+9. reboot system with `sudo shutdown -r 0`
+10. open mobile app
 
 ## update the server
 
